@@ -19,7 +19,7 @@ def addBotCommand(command, function):
     handle = CommandHandler(command, function)
     botBackend.dispatcher.add_handler(handle)
 
-#Filter is e.g. Filters.photo
+#Filter param is e.g. Filters.photo
 def addBotMessage(filter, function):
     handle = CommandHandler(filter, function)
     botBackend.dispatcher.add_handler(handle)
