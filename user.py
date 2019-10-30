@@ -21,3 +21,6 @@ def addUser(users,chatID,data=None):
 def removeUser(users,chatID):
     del users[str(chatID)]
     saveUser(users)
+
+def getUser(users,chatID):
+    return users[str(chatID)]

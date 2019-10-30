@@ -40,6 +40,10 @@ def modifyUser(chatID,data=None):
 def addUser(chatID,data=None):
     botBackend.user.addUser(botBackend.users,chatID,data)
 
+#Gets the data of a user
+def user(chatID):
+    return botBackend.user.getUser(botBackend.users,chatID)
+
 #Removes a user
 def removeUser(chatID):
     botBackend.user.removeUser(botBackend.users,chatID)
