@@ -7,10 +7,8 @@ from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 from telegram import utils
 
-import config
-import user
-import botBackend
-
+import PythonTelegramWraper.config as config
+import PythonTelegramWraper.user as user
 
 #Setting up the dispatcher in which the available
 #bot messages will be stored

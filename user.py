@@ -6,16 +6,15 @@ def saveUser(users):
 
 def loadUser():
     users={}
-    with open('user.json') as json_file:
-        users = json.load(json_file)
+    try:
+        with open('user.json') as json_file:
+            users = json.load(json_file)
+    except:
+        print("Loading error")
     return users
 
 def modifyUser(users,chatID,data=None):
-    users[str(chatID)]=data
-    saveUser(users)
-
-def addUser(users,chatID,data=None):
-    users[str(chatID)]
+    users.update( {str(chatID) : data} )
     saveUser(users)
 
 def removeUser(users,chatID):
@@ -23,4 +22,7 @@ def removeUser(users,chatID):
     saveUser(users)
 
 def getUser(users,chatID):
-    return users[str(chatID)]
+    if(str(chatID) in users):
+        return users[str(chatID)]
+    else:
+        return None

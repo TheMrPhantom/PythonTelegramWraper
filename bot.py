@@ -8,7 +8,7 @@ from telegram import InlineKeyboardMarkup
 from telegram import utils
 
 import copy
-import botBackend
+import PythonTelegramWraper.botBackend as botBackend
 
 #Get the chat id of an update object
 def chatID(update):
@@ -47,6 +47,20 @@ def user(chatID):
 #Removes a user
 def removeUser(chatID):
     botBackend.user.removeUser(botBackend.users,chatID)
+
+def sendMessage(chatID, message,isHTML=False):
+    
+    if not isHTML:
+        botBackend.dispatcher.bot.sendMessage(int(chatID), 
+                    message, 
+                    parse_mode="Markdown")
+    else:
+        botBackend.dispatcher.bot.sendMessage(int(chatID), 
+                    message, 
+                    parse_mode="HTML")
+
+def sendPhoto(chatID, src, captionText=None):
+    botBackend.dispatcher.bot.send_photo(chat_id=chatID, photo=src,caption=captionText)
 
 #Return a copy of the user data
 #!Can be huge!
