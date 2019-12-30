@@ -60,7 +60,7 @@ def sendMessage(chatID, message,isHTML=False):
                     parse_mode="HTML")
 
 def sendPhoto(chatID, src, captionText=None):
-    botBackend.dispatcher.bot.send_photo(chat_id=chatID, photo=src,caption=captionText)
+    botBackend.dispatcher.bot.send_photo(chat_id=chatID, photo=src,caption=captionText,parse_mode="Markdown")
 
 #Return a copy of the user data
 #!Can be huge!
