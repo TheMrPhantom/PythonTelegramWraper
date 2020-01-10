@@ -51,11 +51,11 @@ def removeUser(chatID):
 def sendMessage(chatID, message,isHTML=False):
     
     if not isHTML:
-        botBackend.dispatcher.bot.sendMessage(int(chatID), 
+        botBackend.updater.bot.sendMessage(int(chatID), 
                     message, 
                     parse_mode="Markdown")
     else:
-        botBackend.dispatcher.bot.sendMessage(int(chatID), 
+        botBackend.updater.bot.sendMessage(int(chatID), 
                     message, 
                     parse_mode="HTML")
 
