@@ -66,3 +66,6 @@ def sendPhoto(chatID, src, captionText=None):
 #!Can be huge!
 def getUserData():
     return copy.deepcopy(botBackend.users)
+
+def getUserDataOriginal():
+    return botBackend.users
