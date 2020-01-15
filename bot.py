@@ -21,7 +21,7 @@ def addBotCommand(command, function):
 
 #Filter param is e.g. Filters.photo
 def addBotMessage(filter, function):
-    handle = CommandHandler(filter, function)
+    handle = MessageHandler(filter, function)
     botBackend.dispatcher.add_handler(handle)
 
 #Starts the bot
@@ -36,10 +36,6 @@ def save():
 def modifyUser(chatID,data=None):
     botBackend.user.modifyUser(botBackend.users,chatID,data)
 
-#Adds a user optional with data
-def addUser(chatID,data=None):
-    botBackend.user.addUser(botBackend.users,chatID,data)
-
 #Gets the data of a user
 def user(chatID):
     return botBackend.user.getUser(botBackend.users,chatID)
@@ -48,16 +44,16 @@ def user(chatID):
 def removeUser(chatID):
     botBackend.user.removeUser(botBackend.users,chatID)
 
-def sendMessage(chatID, message,isHTML=False):
+def sendMessage(chatID, message,isHTML=False,rpl_markup=None):
     
     if not isHTML:
         botBackend.updater.bot.sendMessage(int(chatID), 
                     message, 
-                    parse_mode="Markdown")
+                    parse_mode="Markdown",reply_markup=rpl_markup)
     else:
         botBackend.updater.bot.sendMessage(int(chatID), 
                     message, 
-                    parse_mode="HTML")
+                    parse_mode="HTML",reply_markup=rpl_markup)
 
 def sendPhoto(chatID, src, captionText=None):
     botBackend.dispatcher.bot.send_photo(chat_id=chatID, photo=src,caption=captionText,parse_mode="Markdown")
@@ -69,3 +65,17 @@ def getUserData():
 
 def getUserDataOriginal():
     return botBackend.users
+
+def getBot():
+    return botBackend.updater.bot
+
+def build_menu(buttons,
+               n_cols,
+               header_buttons=None,
+               footer_buttons=None):
+    menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
+    if header_buttons:
+        menu.insert(0, [header_buttons])
+    if footer_buttons:
+        menu.append([footer_buttons])
+    return menu
