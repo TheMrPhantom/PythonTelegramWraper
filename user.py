@@ -18,8 +18,9 @@ def modifyUser(users,chatID,data=None):
     saveUser(users)
 
 def removeUser(users,chatID):
-    del users[str(chatID)]
-    saveUser(users)
+    if str(chatID) in users:
+        del users[str(chatID)]
+        saveUser(users)
 
 def getUser(users,chatID):
     if(str(chatID) in users):
