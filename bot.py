@@ -10,38 +10,61 @@ from telegram import utils
 import copy
 import PythonTelegramWraper.botBackend as botBackend
 
-#Get the chat id of an update object
+
 def chatID(update):
+    '''
+    Get the chat id of an update object
+    '''
     return update.effective_chat.id
 
 #Specify command without slash e.g. "start"
 def addBotCommand(command, function):
+    '''
+    Normal Telegram command,
+    e.g command = "subscribe" then this method will be called when someone types: "/subscribe"
+    '''
     handle = CommandHandler(command, function)
     botBackend.dispatcher.add_handler(handle)
 
 #Filter param is e.g. Filters.photo
 def addBotMessage(filter, function):
+    '''
+    Filter param is e.g. Filters.photo
+    '''
     handle = MessageHandler(filter, function)
     botBackend.dispatcher.add_handler(handle)
 
-#Starts the bot
+
 def startBot():
+    '''
+    Starts the bot
+    '''
     botBackend.updater.start_polling()
 
-#Stores the user data in the user.json
 def save():
+    '''
+    Stores the user data in the user.json
+    '''
     botBackend.user.saveUser(botBackend.users)
 
-#Changes the data of a user to the applied data
+
 def modifyUser(chatID,data=None):
+    '''
+    Changes the data of a user to the supplied data, creates user if not existing
+    '''
     botBackend.user.modifyUser(botBackend.users,chatID,data)
 
-#Gets the data of a user
+
 def user(chatID):
+    '''
+    Gets the data of a user (None if not existing)
+    '''
     return botBackend.user.getUser(botBackend.users,chatID)
 
-#Removes a user
 def removeUser(chatID):
+    '''
+    Removes a user
+    '''
     botBackend.user.removeUser(botBackend.users,chatID)
 
 def sendMessage(chatID, message,isHTML=False,rpl_markup=None):
