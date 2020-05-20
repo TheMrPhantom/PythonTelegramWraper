@@ -84,6 +84,9 @@ def sendPhoto(chatID, src, captionText=None):
 #Return a copy of the user data
 #!Can be huge!
 def getUserData():
+    '''
+    Returns all users with their data -> chatID:<data>
+    '''
     return copy.deepcopy(botBackend.users)
 
 def getUserDataOriginal():
