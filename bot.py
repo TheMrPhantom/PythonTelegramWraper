@@ -67,16 +67,15 @@ def removeUser(chatID):
     '''
     botBackend.user.removeUser(botBackend.users,chatID)
 
-def sendMessage(chatID, message,isHTML=False,rpl_markup=None):
-    
+def sendMessage(chatID, message,isHTML=False,rpl_markup=None,no_web_page_preview=False):
     if not isHTML:
         botBackend.updater.bot.sendMessage(int(chatID), 
                     message, 
-                    parse_mode="Markdown",reply_markup=rpl_markup)
+                    parse_mode="Markdown",reply_markup=rpl_markup,disable_web_page_preview=no_web_page_preview)
     else:
         botBackend.updater.bot.sendMessage(int(chatID), 
                     message, 
-                    parse_mode="HTML",reply_markup=rpl_markup)
+                    parse_mode="HTML",reply_markup=rpl_markup,disable_web_page_preview=no_web_page_preview)
 
 def sendPhoto(chatID, src, captionText=None):
     botBackend.dispatcher.bot.send_photo(chat_id=chatID, photo=src,caption=captionText,parse_mode="Markdown")
