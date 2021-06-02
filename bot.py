@@ -6,101 +6,112 @@ from telegram.ext import Filters
 from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 from telegram import utils
-
+import threading
 import copy
-import PythonTelegramWraper.botBackend as botBackend
+import PythonTelegramWraper.botBackend as backend
+
+class Bot:
+    def __init__(self,use_userfile=True,api_token=None):
+        self.botBackend=backend.Backend(use_userfile,api_token)
 
 
-def chatID(update):
-    '''
-    Get the chat id of an update object
-    '''
-    return update.effective_chat.id
+    def chatID(self,update):
+        '''
+        Get the chat id of an update object
+        '''
+        return update.effective_chat.id
 
-#Specify command without slash e.g. "start"
-def addBotCommand(command, function):
-    '''
-    Normal Telegram command,
-    e.g command = "subscribe" then this method will be called when someone types: "/subscribe"
-    '''
-    handle = CommandHandler(command, function)
-    botBackend.dispatcher.add_handler(handle)
+    #Specify command without slash e.g. "start"
+    def addBotCommand(self,command, function):
+        '''
+        Normal Telegram command,
+        e.g command = "subscribe" then this method will be called when someone types: "/subscribe"
+        '''
+        handle = CommandHandler(command, function)
+        self.botBackend.dispatcher.add_handler(handle)
 
-#Filter param is e.g. Filters.photo
-def addBotMessage(filter, function):
-    '''
-    Filter param is e.g. Filters.photo
-    '''
-    handle = MessageHandler(filter, function)
-    botBackend.dispatcher.add_handler(handle)
-
-
-def startBot():
-    '''
-    Starts the bot
-    '''
-    botBackend.updater.start_polling()
-
-def save():
-    '''
-    Stores the user data in the user.json
-    '''
-    botBackend.user.saveUser(botBackend.users)
+    #Filter param is e.g. Filters.photo
+    def addBotMessage(self,filter, function):
+        '''
+        Filter param is e.g. Filters.photo
+        '''
+        handle = MessageHandler(filter, function)
+        self.botBackend.dispatcher.add_handler(handle)
 
 
-def modifyUser(chatID,data=None):
-    '''
-    Changes the data of a user to the supplied data, creates user if not existing
-    '''
-    botBackend.user.modifyUser(botBackend.users,chatID,data)
+    def startBot(self):
+        '''
+        Starts the bot
+        '''
+        self.botBackend.updater.start_polling()
+    
+    def start_Bot_Async(self):
+        '''
+        Starts the bot without blocking
+        '''
+        x = threading.Thread(target=self.botBackend.updater.start_polling)
+        x.start()
+
+    def save(self):
+        '''
+        Stores the user data in the user.json
+        '''
+        self.botBackend.user.saveUser(self.botBackend.users)
 
 
-def user(chatID):
-    '''
-    Gets the data of a user (None if not existing)
-    '''
-    return botBackend.user.getUser(botBackend.users,chatID)
+    def modifyUser(self,chatID,data=None):
+        '''
+        Changes the data of a user to the supplied data, creates user if not existing
+        '''
+        self.botBackend.user.modifyUser(self.botBackend.users,chatID,data)
 
-def removeUser(chatID):
-    '''
-    Removes a user
-    '''
-    botBackend.user.removeUser(botBackend.users,chatID)
 
-def sendMessage(chatID, message,isHTML=False,rpl_markup=None,no_web_page_preview=False):
-    if not isHTML:
-        botBackend.updater.bot.sendMessage(int(chatID), 
-                    message, 
-                    parse_mode="Markdown",reply_markup=rpl_markup,disable_web_page_preview=no_web_page_preview)
-    else:
-        botBackend.updater.bot.sendMessage(int(chatID), 
-                    message, 
-                    parse_mode="HTML",reply_markup=rpl_markup,disable_web_page_preview=no_web_page_preview)
+    def user(self,chatID):
+        '''
+        Gets the data of a user (None if not existing)
+        '''
+        return self.botBackend.user.getUser(self.botBackend.users,chatID)
 
-def sendPhoto(chatID, src, captionText=None):
-    botBackend.dispatcher.bot.send_photo(chat_id=chatID, photo=src,caption=captionText,parse_mode="Markdown")
+    def removeUser(self,chatID):
+        '''
+        Removes a user
+        '''
+        self.botBackend.user.removeUser(self.botBackend.users,chatID)
 
-#Return a copy of the user data
-#!Can be huge!
-def getUserData():
-    '''
-    Returns all users with their data -> chatID:<data>
-    '''
-    return copy.deepcopy(botBackend.users)
+    def sendMessage(self,chatID, message,isHTML=False,rpl_markup=None,no_web_page_preview=False):
+        if not isHTML:
+            self.botBackend.updater.bot.sendMessage(int(chatID), 
+                        message, 
+                        parse_mode="Markdown",reply_markup=rpl_markup,disable_web_page_preview=no_web_page_preview)
+        else:
+            self.botBackend.updater.bot.sendMessage(int(chatID), 
+                        message, 
+                        parse_mode="HTML",reply_markup=rpl_markup,disable_web_page_preview=no_web_page_preview)
 
-def getUserDataOriginal():
-    return botBackend.users
+    def sendPhoto(self,chatID, src, captionText=None):
+        self.botBackend.dispatcher.bot.send_photo(chat_id=chatID, photo=src,caption=captionText,parse_mode="Markdown")
 
-def getBot():
-    return botBackend.updater.bot
+    #Return a copy of the user data
+    #!Can be huge!
+    def getUserData(self):
+        '''
+        Returns all users with their data -> chatID:<data>
+        '''
+        return copy.deepcopy(self.botBackend.users)
 
-def build_menu(buttons,
-               n_cols,
-               header_buttons=None,
-               footer_buttons=None):
-    menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
-    if header_buttons:
-        menu.insert(0, [header_buttons])
-    if footer_buttons:
-        menu.append([footer_buttons])
-    return menu
+    def getUserDataOriginal(self):
+        return self.botBackend.users
+
+    def getBot(self):
+        return self.botBackend.updater.bot
+
+    def build_menu(self,buttons,
+                n_cols,
+                header_buttons=None,
+                footer_buttons=None):
+        menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
+        if header_buttons:
+            menu.insert(0, [header_buttons])
+        if footer_buttons:
+            menu.append([footer_buttons])
+        return menu
