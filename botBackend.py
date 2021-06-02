@@ -18,6 +18,8 @@ class Backend:
         if api_token is None:
             import PythonTelegramWraper.config as config
             token=config.telegramToken
+        else:
+            token=api_token
 
         self.updater = Updater(token, use_context=True)
         self.dispatcher = self.updater.dispatcher
