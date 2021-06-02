@@ -49,7 +49,7 @@ class Bot:
         '''
         Starts the bot without blocking
         '''
-        x = threading.Thread(target=self.botBackend.updater.start_polling)
+        x = threading.Thread(target=self.botBackend.updater.start_polling,daemon=True)
         x.start()
 
     def save(self):
